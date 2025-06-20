@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance - Sign In</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container attendance-container">
+        <!-- No Active Attendance -->
+        <div id="noAttendanceScreen" class="screen">
+            <div class="status-card">
+                <div class="status-icon">📋</div>
+                <h2>No Active Attendance</h2>
+                <p>There is currently no active attendance event. Please check with your lecturer.</p>
+                <button id="refreshBtn" class="btn btn-primary">Refresh</button>
+            </div>
+        </div>
+
+        <!-- Active Attendance Form -->
+        <div id="attendanceFormScreen" class="screen hidden">
+            <div class="attendance-card">
+                <div class="course-header">
+                    <h1 id="courseName">Loading...</h1>
+                    <div class="attendance-details">
+                        <span id="hallName">Loading...</span>
+                        <span id="timeRemaining" class="time-remaining">Loading...</span>
+                    </div>
+                </div>
+
+                <form id="attendanceForm">
+                    <div class="form-group">
+                        <label for="studentName">Full Name</label>
+                        <input type="text" id="studentName" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="matricNumber">Matric Number</label>
+                        <input type="text" id="matricNumber" placeholder="e.g., 230153035" maxlength="9" required>
+                        <small>Enter your 9-digit matric number</small>
+                    </div>
+
+                    <div class="location-status" id="locationStatus">
+                        <div class="location-icon">📍</div>
+                        <span>Getting your location...</span>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn btn-primary" disabled>
+                        Sign In to Attendance
+                    </button>
+                </form>
+
+                <div id="attendanceError" class="error-message hidden"></div>
+            </div>
+        </div>
+
+        <!-- Success Screen -->
+        <div id="successScreen" class="screen hidden">
+            <div class="status-card success-card">
+                <div class="status-icon success-icon">✓</div>
+                <h2>Attendance Recorded!</h2>
+                <p>Your attendance has been successfully recorded.</p>
+                <div id="successDetails" class="success-details"></div>
+                <button id="backToForm" class="btn btn-primary">Done</button>
+            </div>
+        </div>
+
+        <!-- Error Screen -->
+        <div id="errorScreen" class="screen hidden">
+            <div class="status-card error-card">
+                <div class="status-icon error-icon">❌</div>
+                <h2 id="errorTitle">Attendance Failed</h2>
+                <p id="errorMessage">There was an issue recording your attendance.</p>
+                <div class="error-actions">
+                    <button id="retryBtn" class="btn btn-primary">Try Again</button>
+                    <button id="refreshPageBtn" class="btn btn-outline">Refresh Page</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay hidden">
+            <div class="loading-spinner"></div>
+            <p id="loadingText">Loading...</p>
+        </div>
+    </div>
+
+    <script src="attend.js"></script>
+</body>
+
+</html>

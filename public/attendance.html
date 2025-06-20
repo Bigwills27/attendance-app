@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management - Smart Attendance</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <h1>Attendance Management</h1>
+            <div class="header-actions">
+                <button id="backToDashboard" class="btn btn-outline">← Back to Dashboard</button>
+            </div>
+        </header>
+
+        <div class="filters-section">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label for="courseFilter">Course</label>
+                    <input type="text" id="courseFilter" placeholder="Search by course...">
+                </div>
+                <div class="filter-group">
+                    <label for="hallFilter">Hall</label>
+                    <select id="hallFilter">
+                        <option value="">All Halls</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="dateFilter">Date</label>
+                    <input type="date" id="dateFilter">
+                </div>
+                <div class="filter-group">
+                    <label for="searchFilter">Search Student</label>
+                    <input type="text" id="searchFilter" placeholder="Name or matric...">
+                </div>
+                <div class="filter-actions">
+                    <button id="applyFilters" class="btn btn-primary">Apply Filters</button>
+                    <button id="clearFilters" class="btn btn-outline">Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="attendance-list" id="attendanceList">
+            <!-- Attendance records will be loaded here -->
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay hidden">
+            <div class="loading-spinner"></div>
+            <p>Loading attendance records...</p>
+        </div>
+    </div>
+
+    <!-- Attendance Detail Modal -->
+    <div id="attendanceDetailModal" class="modal hidden">
+        <div class="modal-content large-modal">
+            <span class="close" id="closeDetailModal">&times;</span>
+            <div class="modal-header">
+                <h2 id="modalTitle">Attendance Details</h2>
+                <div class="modal-actions">
+                    <button id="exportPdfBtn" class="btn btn-primary">Export PDF</button>
+                </div>
+            </div>
+            <div class="attendance-summary" id="attendanceSummary">
+                <!-- Summary will be loaded here -->
+            </div>
+            <div class="students-table-container">
+                <table class="students-table" id="studentsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Matric Number</th>
+                            <th>Time Signed</th>
+                            <th>Location</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody">
+                        <!-- Student records will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="attendance.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecturer Dashboard - Smart Attendance</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="screen">
+            <div class="login-card">
+                <h1>Lecturer Dashboard</h1>
+                <p>Enter your access code to continue</p>
+                <form id="loginForm">
+                    <input type="password" id="passcode" placeholder="Enter 6-digit passcode" maxlength="6" required>
+                    <button type="submit">Access Dashboard</button>
+                </form>
+                <div id="loginError" class="error-message hidden"></div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div id="dashboardScreen" class="screen hidden">
+            <header class="dashboard-header">
+                <h1>Smart Attendance System</h1>
+                <div class="header-actions">
+                    <button id="newCourseBtn" class="btn btn-primary">+ New Course</button>
+                    <button id="attendanceHistoryBtn" class="btn btn-secondary">View All Attendance</button>
+                    <button id="logoutBtn" class="btn btn-outline">Logout</button>
+                </div>
+            </header>
+
+            <main class="dashboard-main">
+                <div class="courses-grid" id="coursesGrid">
+                    <!-- Courses will be loaded here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- New Course Modal -->
+    <div id="newCourseModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" id="closeNewCourseModal">&times;</span>
+            <h2>Create New Course</h2>
+            <form id="newCourseForm">
+                <div class="form-group">
+                    <label for="courseCode">Course Code</label>
+                    <input type="text" id="courseCode" placeholder="e.g., CSC102" required>
+                </div>
+                <div class="form-group">
+                    <label for="courseTitle">Course Title</label>
+                    <input type="text" id="courseTitle" placeholder="e.g., Introduction to Computer Science" required>
+                </div>
+                <div class="form-group">
+                    <label for="lecturerName">Lecturer Name</label>
+                    <input type="text" id="lecturerName" placeholder="e.g., Dr. Smith" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancelNewCourse" class="btn btn-outline">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Attendance Modal -->
+    <div id="createAttendanceModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" id="closeAttendanceModal">&times;</span>
+            <h2>Create Attendance Event</h2>
+            <div id="selectedCourseInfo" class="course-info"></div>
+            <form id="createAttendanceForm">
+                <div class="form-group">
+                    <label for="hallSelect">Select Lecture Hall</label>
+                    <select id="hallSelect" required>
+                        <option value="">Choose a hall...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="duration">Duration (minutes)</label>
+                    <select id="duration" required>
+                        <option value="5">5 minutes</option>
+                        <option value="10" selected>10 minutes</option>
+                        <option value="15">15 minutes</option>
+                        <option value="20">20 minutes</option>
+                        <option value="30">30 minutes</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancelAttendance" class="btn btn-outline">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Activate Attendance</button>
+                </div>
+            </form>
+            <div id="attendanceError" class="error-message hidden"></div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal hidden">
+        <div class="modal-content success-modal">
+            <span class="close" id="closeSuccessModal">&times;</span>
+            <div class="success-icon">✓</div>
+            <h2>Attendance Activated!</h2>
+            <div id="successDetails" class="success-details"></div>
+            <div class="announcement-box">
+                <p><strong>Announce to students:</strong></p>
+                <div id="announcementText" class="announcement-text"></div>
+                <button id="copyAnnouncement" class="btn btn-secondary">Copy Announcement</button>
+            </div>
+            <div class="form-actions">
+                <button id="closeAttendanceBtn" class="btn btn-outline">Close Attendance</button>
+                <button id="backToDashboard" class="btn btn-primary">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>
