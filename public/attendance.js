@@ -4,6 +4,7 @@ class AttendanceManagement {
     this.attendanceRecords = [];
     this.filteredRecords = [];
     this.currentDetailRecord = null;
+    this.recordToDelete = null;
     this.init();
   }
 
@@ -62,6 +63,19 @@ class AttendanceManagement {
       .getElementById("attendanceDetailModal")
       .addEventListener("click", (e) => {
         if (e.target === e.currentTarget) this.hideDetailModal();
+      });
+
+    // Delete confirmation modal
+    document
+      .getElementById("cancelDeleteBtn")
+      .addEventListener("click", this.hideDeleteConfirm.bind(this));
+    document
+      .getElementById("confirmDeleteBtn")
+      .addEventListener("click", this.confirmDelete.bind(this));
+    document
+      .getElementById("deleteConfirmModal")
+      .addEventListener("click", (e) => {
+        if (e.target === e.currentTarget) this.hideDeleteConfirm();
       });
   }
 
@@ -198,6 +212,11 @@ class AttendanceManagement {
                 <div class="attendance-item" onclick="attendanceManagement.showDetailModal('${
                   record._id
                 }')">
+                    <button class="delete-btn" onclick="event.stopPropagation(); attendanceManagement.showDeleteConfirm('${record._id}')" title="Delete this attendance record">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
                     <div class="attendance-header">
                         <div class="attendance-course">${
                           record.courseName
@@ -415,8 +434,64 @@ class AttendanceManagement {
     }
   }
 
-  showLoading() {
-    document.getElementById("loadingOverlay").classList.remove("hidden");
+  showDeleteConfirm(recordId) {
+    const record = this.attendanceRecords.find((r) => r._id === recordId);
+    if (!record) return;
+
+    this.recordToDelete = record;
+
+    // Populate record info
+    const startTime = new Date(record.startTime);
+    document.getElementById("deleteRecordInfo").innerHTML = `
+      <p><strong>Course:</strong> ${record.courseName}</p>
+      <p><strong>Hall:</strong> ${record.hall}</p>
+      <p><strong>Date:</strong> ${startTime.toLocaleDateString()}</p>
+      <p><strong>Students:</strong> ${record.students.length} records</p>
+    `;
+
+    // Show modal
+    document.getElementById("deleteConfirmModal").classList.remove("hidden");
+  }
+
+  hideDeleteConfirm() {
+    document.getElementById("deleteConfirmModal").classList.add("hidden");
+    this.recordToDelete = null;
+  }
+
+  async confirmDelete() {
+    if (!this.recordToDelete) return;
+
+    try {
+      this.showLoading("Deleting attendance record...");
+
+      const response = await fetch(`/api/attendance/${this.recordToDelete._id}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        this.showToast("Attendance record deleted successfully", "success");
+        this.hideDeleteConfirm();
+        // Remove from local array
+        this.attendanceRecords = this.attendanceRecords.filter(
+          record => record._id !== this.recordToDelete._id
+        );
+        this.applyFilters(); // Refresh the display
+      } else {
+        const result = await response.json();
+        this.showError(result.error || "Failed to delete attendance record");
+      }
+    } catch (error) {
+      console.error("Error deleting attendance record:", error);
+      this.showError("Network error occurred while deleting the record");
+    } finally {
+      this.hideLoading();
+    }
+  }
+
+  showLoading(message = "Loading...") {
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    loadingOverlay.classList.remove("hidden");
+    loadingOverlay.querySelector(".loading-message").textContent = message;
   }
 
   hideLoading() {
@@ -459,6 +534,41 @@ class AttendanceManagement {
     setTimeout(() => {
       if (document.body.contains(toast)) {
         document.body.removeChild(toast);
+      }
+    }, 5000);
+  }
+
+  showToast(message, type = "info") {
+    const toast = document.createElement("div");
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `
+      <div class="toast-content">
+        <span>${message}</span>
+        <button class="toast-close" onclick="this.parentElement.parentElement.remove()">×</button>
+      </div>
+    `;
+
+    // Add styles
+    toast.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 3000;
+      max-width: 350px;
+      animation: slideInRight 0.3s ease-out;
+    `;
+
+    document.body.appendChild(toast);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      if (document.body.contains(toast)) {
+        toast.style.animation = "slideOutRight 0.3s ease-in";
+        setTimeout(() => {
+          if (document.body.contains(toast)) {
+            document.body.removeChild(toast);
+          }
+        }, 300);
       }
     }, 5000);
   }

@@ -518,6 +518,32 @@ app.post("/api/halls/add", async (req, res) => {
   }
 });
 
+// Delete attendance record endpoint
+app.delete("/api/attendance/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid attendance record ID" });
+    }
+
+    const result = await db.collection('attendances').deleteOne({
+      _id: new ObjectId(id)
+    });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: "Attendance record not found" });
+    }
+
+    console.log(`Attendance record ${id} deleted`);
+    res.json({ success: true, message: "Attendance record deleted successfully" });
+
+  } catch (error) {
+    console.error("Error deleting attendance record:", error);
+    res.status(500).json({ error: "Failed to delete attendance record" });
+  }
+});
+
 // Serve static files
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "admin.html"));

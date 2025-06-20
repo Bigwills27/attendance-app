@@ -1,0 +1,176 @@
+/* Delete Button and Modal Styles */
+.attendance-item {
+    position: relative;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: #dc2626;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.2s ease;
+    opacity: 0.8;
+}
+
+.delete-btn:hover {
+    background: #b91c1c;
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.delete-btn svg {
+    pointer-events: none;
+}
+
+/* Small Modal for Delete Confirmation */
+.small-modal {
+    max-width: 480px;
+    width: 90%;
+}
+
+.modal-body {
+    padding: 1.5rem 0;
+}
+
+.modal-body p {
+    margin-bottom: 1rem;
+    color: #e5e5e5;
+}
+
+.delete-warning {
+    background: #3d1a1a;
+    border: 1px solid #5a2d2d;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.delete-warning p {
+    color: #f87171;
+    margin-bottom: 0.5rem;
+}
+
+.record-info {
+    background: #1a1a1a;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+}
+
+.record-info p {
+    margin-bottom: 0.5rem;
+    color: #a0a0a0;
+    font-size: 0.9rem;
+}
+
+.record-info strong {
+    color: #ffffff;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    padding-top: 1.5rem;
+    border-top: 1px solid #2a2a2a;
+}
+
+/* Toast Notifications */
+.toast {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.toast-success {
+    border-left: 4px solid #10b981;
+}
+
+.toast-error {
+    border-left: 4px solid #ef4444;
+}
+
+.toast-info {
+    border-left: 4px solid #3b82f6;
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    color: #e5e5e5;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: #a0a0a0;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 1rem;
+    line-height: 1;
+}
+
+.toast-close:hover {
+    color: #ffffff;
+}
+
+/* Toast Animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Mobile Responsive for Delete Button */
+@media (max-width: 768px) {
+    .delete-btn {
+        width: 28px;
+        height: 28px;
+        top: 0.75rem;
+        right: 0.75rem;
+    }
+    
+    .delete-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+    }
+}
