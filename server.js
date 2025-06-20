@@ -73,6 +73,15 @@ async function initializeDatabase() {
             { lat: 6.473150, lng: 3.199350 },
             { lat: 6.473150, lng: 3.199200 }
           ]
+        },
+        {
+          name: "BASE",
+          polygon: [
+                { lat: 6.506791408381259, lng: 3.1989491628486872 },
+                { lat: 6.5067167902985465, lng: 3.1989370929089223 },
+                { lat: 6.506703465639764, lng: 3.1990323113226204 },
+                { lat: 6.506774086327322, lng: 3.1990423696057575 }
+          ]
         }
       ]);
       console.log('Halls collection seeded');
