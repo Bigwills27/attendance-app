@@ -79,7 +79,7 @@ class StudentAttendance {
 
   showLocationPrompt() {
     const locationStatus = document.getElementById("locationStatus");
-    
+
     locationStatus.innerHTML = `
       <div class="location-icon">📍</div>
       <div style="flex: 1;">
@@ -97,24 +97,28 @@ class StudentAttendance {
         </button>
       </div>
     `;
-    
-    locationStatus.className = 'location-status';
-    
+
+    locationStatus.className = "location-status";
+
     // Bind button events
-    document.getElementById('getLocationBtn').addEventListener('click', () => {
+    document.getElementById("getLocationBtn").addEventListener("click", () => {
       this.getUserLocation();
     });
-    
-    document.getElementById('manualLocationBtn').addEventListener('click', () => {
-      this.showManualLocationForm();
-    });
+
+    document
+      .getElementById("manualLocationBtn")
+      .addEventListener("click", () => {
+        this.showManualLocationForm();
+      });
   }
 
   getUserLocation() {
     const locationStatus = document.getElementById("locationStatus");
 
     if (!navigator.geolocation) {
-      this.showLocationAlternatives("Geolocation is not supported by this browser");
+      this.showLocationAlternatives(
+        "Geolocation is not supported by this browser"
+      );
       return;
     }
 
@@ -127,8 +131,8 @@ class StudentAttendance {
     try {
       await this.tryGetLocation({
         enableHighAccuracy: true,
-        timeout: 8000,
-        maximumAge: 30000
+        timeout: 15000,
+        maximumAge: 0,
       });
       return;
     } catch (error) {
@@ -137,11 +141,15 @@ class StudentAttendance {
 
     // Method 2: Standard GPS with longer timeout
     try {
-      this.updateLocationStatus("loading", "📍", "Trying alternative location method...");
+      this.updateLocationStatus(
+        "loading",
+        "📍",
+        "Trying alternative location method..."
+      );
       await this.tryGetLocation({
         enableHighAccuracy: false,
         timeout: 15000,
-        maximumAge: 60000
+        maximumAge: 60000,
       });
       return;
     } catch (error) {
@@ -150,11 +158,15 @@ class StudentAttendance {
 
     // Method 3: Use cached location if available
     try {
-      this.updateLocationStatus("loading", "📍", "Checking for recent location...");
+      this.updateLocationStatus(
+        "loading",
+        "📍",
+        "Checking for recent location..."
+      );
       await this.tryGetLocation({
         enableHighAccuracy: false,
         timeout: 5000,
-        maximumAge: 300000 // 5 minutes
+        maximumAge: 300000, // 5 minutes
       });
       return;
     } catch (error) {
@@ -172,13 +184,16 @@ class StudentAttendance {
           this.userLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
-            accuracy: position.coords.accuracy
+            accuracy: position.coords.accuracy,
           };
-          
-          const accuracyText = position.coords.accuracy < 100 ? 
-            "High accuracy" : position.coords.accuracy < 500 ? 
-            "Medium accuracy" : "Low accuracy";
-            
+
+          const accuracyText =
+            position.coords.accuracy < 100
+              ? "High accuracy"
+              : position.coords.accuracy < 500
+              ? "Medium accuracy"
+              : "Low accuracy";
+
           this.updateLocationStatus(
             "success",
             "✅",
@@ -197,14 +212,15 @@ class StudentAttendance {
 
   showLocationAlternatives(initialMessage) {
     const locationStatus = document.getElementById("locationStatus");
-    
+
     let message = initialMessage;
     switch (true) {
-      case navigator.userAgent.toLowerCase().indexOf('mobile') === -1:
+      case navigator.userAgent.toLowerCase().indexOf("mobile") === -1:
         message = "Location services may not work well on desktop browsers";
         break;
       case !window.isSecureContext:
-        message = "Location requires HTTPS. Try refreshing or use a different browser";
+        message =
+          "Location requires HTTPS. Try refreshing or use a different browser";
         break;
     }
 
@@ -226,11 +242,15 @@ class StudentAttendance {
               📍 Enter Manually
             </button>
             
-            ${this.shouldShowDevBypass() ? `
+            ${
+              this.shouldShowDevBypass()
+                ? `
             <button id="useTestLocation" class="btn btn-outline" style="font-size: 0.875rem; padding: 0.5rem 1rem; margin-top: 0.5rem;">
               🔧 Dev Mode
             </button>
-            ` : ''}
+            `
+                : ""
+            }
           </div>
           
           <div id="manualLocationForm" class="manual-location-form hidden" style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
@@ -252,49 +272,57 @@ class StudentAttendance {
         </div>
       </div>
     `;
-    
-    locationStatus.className = 'location-status warning';
-    
+
+    locationStatus.className = "location-status warning";
+
     // Bind events
-    document.getElementById('retryLocation').addEventListener('click', () => {
+    document.getElementById("retryLocation").addEventListener("click", () => {
       this.getUserLocation();
     });
-    
-    document.getElementById('manualLocation').addEventListener('click', () => {
-      const form = document.getElementById('manualLocationForm');
-      form.classList.toggle('hidden');
+
+    document.getElementById("manualLocation").addEventListener("click", () => {
+      const form = document.getElementById("manualLocationForm");
+      form.classList.toggle("hidden");
     });
-    
-    document.getElementById('useManualLocation').addEventListener('click', () => {
-      const lat = parseFloat(document.getElementById('manualLat').value);
-      const lng = parseFloat(document.getElementById('manualLng').value);
-      
-      if (isNaN(lat) || isNaN(lng)) {
-        alert('Please enter valid latitude and longitude values');
-        return;
-      }
-      
-      this.userLocation = { lat, lng, accuracy: 'manual' };
-      this.updateLocationStatus("success", "📍", "Manual location set");
-      this.enableSubmitButton();
-    });
-    
-    if (this.shouldShowDevBypass()) {
-      document.getElementById('useTestLocation').addEventListener('click', () => {
-        this.userLocation = {
-          lat: 6.472590,  // Within ENG HALL A bounds
-          lng: 3.198925,
-          accuracy: 'test'
-        };
-        this.updateLocationStatus("success", "🔧", "Using test location (Development Mode)");
+
+    document
+      .getElementById("useManualLocation")
+      .addEventListener("click", () => {
+        const lat = parseFloat(document.getElementById("manualLat").value);
+        const lng = parseFloat(document.getElementById("manualLng").value);
+
+        if (isNaN(lat) || isNaN(lng)) {
+          alert("Please enter valid latitude and longitude values");
+          return;
+        }
+
+        this.userLocation = { lat, lng, accuracy: "manual" };
+        this.updateLocationStatus("success", "📍", "Manual location set");
         this.enableSubmitButton();
       });
+
+    if (this.shouldShowDevBypass()) {
+      document
+        .getElementById("useTestLocation")
+        .addEventListener("click", () => {
+          this.userLocation = {
+            lat: 6.47259, // Within ENG HALL A bounds
+            lng: 3.198925,
+            accuracy: "test",
+          };
+          this.updateLocationStatus(
+            "success",
+            "🔧",
+            "Using test location (Development Mode)"
+          );
+          this.enableSubmitButton();
+        });
     }
   }
 
   showManualLocationForm() {
     const locationStatus = document.getElementById("locationStatus");
-    
+
     locationStatus.innerHTML = `
       <div class="location-icon">📍</div>
       <div style="flex: 1;">
@@ -319,62 +347,82 @@ class StudentAttendance {
           Back
         </button>
         
-        ${this.shouldShowDevBypass() ? `
+        ${
+          this.shouldShowDevBypass()
+            ? `
         <button id="useTestLocationBtn" class="btn btn-outline" style="font-size: 0.875rem; padding: 0.5rem 1rem; margin-top: 0.5rem;">
           🔧 Use Test Location
         </button>
-        ` : ''}
+        `
+            : ""
+        }
       </div>
     `;
-    
-    locationStatus.className = 'location-status warning';
-    
+
+    locationStatus.className = "location-status warning";
+
     // Bind events
-    document.getElementById('useManualLocation').addEventListener('click', () => {
-      const lat = parseFloat(document.getElementById('manualLat').value);
-      const lng = parseFloat(document.getElementById('manualLng').value);
-      
-      if (isNaN(lat) || isNaN(lng)) {
-        alert('Please enter valid latitude and longitude values');
-        return;
-      }
-      
-      this.userLocation = { lat, lng, accuracy: 'manual' };
-      this.updateLocationStatus("success", "📍", "Manual location set");
-      this.enableSubmitButton();
-    });
-    
-    document.getElementById('backToLocationOptions').addEventListener('click', () => {
-      this.showLocationPrompt();
-    });
-    
-    if (this.shouldShowDevBypass()) {
-      document.getElementById('useTestLocationBtn').addEventListener('click', () => {
-        this.userLocation = {
-          lat: 6.472590,
-          lng: 3.198925,
-          accuracy: 'test'
-        };
-        this.updateLocationStatus("success", "🔧", "Using test location (Development Mode)");
+    document
+      .getElementById("useManualLocation")
+      .addEventListener("click", () => {
+        const lat = parseFloat(document.getElementById("manualLat").value);
+        const lng = parseFloat(document.getElementById("manualLng").value);
+
+        if (isNaN(lat) || isNaN(lng)) {
+          alert("Please enter valid latitude and longitude values");
+          return;
+        }
+
+        this.userLocation = { lat, lng, accuracy: "manual" };
+        this.updateLocationStatus("success", "📍", "Manual location set");
         this.enableSubmitButton();
       });
+
+    document
+      .getElementById("backToLocationOptions")
+      .addEventListener("click", () => {
+        this.showLocationPrompt();
+      });
+
+    if (this.shouldShowDevBypass()) {
+      document
+        .getElementById("useTestLocationBtn")
+        .addEventListener("click", () => {
+          this.userLocation = {
+            lat: 6.47259,
+            lng: 3.198925,
+            accuracy: "test",
+          };
+          this.updateLocationStatus(
+            "success",
+            "🔧",
+            "Using test location (Development Mode)"
+          );
+          this.enableSubmitButton();
+        });
     }
   }
 
   shouldShowDevBypass() {
-    return (window.location.hostname === 'localhost' || 
-            window.location.hostname === '127.0.0.1') && 
-           navigator.userAgent.toLowerCase().indexOf('mobile') === -1;
+    return (
+      (window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1") &&
+      navigator.userAgent.toLowerCase().indexOf("mobile") === -1
+    );
   }
 
   updateLocationStatus(type, icon, text) {
     const locationStatus = document.getElementById("locationStatus");
-    
+
     // Check if we have the new structure with alternatives
     const existingIcon = locationStatus.querySelector(".location-icon");
     const existingText = locationStatus.querySelector("span");
-    
-    if (existingIcon && existingText && !locationStatus.querySelector(".location-alternatives")) {
+
+    if (
+      existingIcon &&
+      existingText &&
+      !locationStatus.querySelector(".location-alternatives")
+    ) {
       // Simple update for basic structure
       locationStatus.className = `location-status ${type}`;
       existingIcon.textContent = icon;
@@ -612,8 +660,6 @@ class StudentAttendance {
   hideLoading() {
     document.getElementById("loadingOverlay").classList.add("hidden");
   }
-
-  // ...existing code...
 }
 
 // Initialize the attendance system when the page loads

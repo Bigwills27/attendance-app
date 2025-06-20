@@ -461,6 +461,63 @@ app.get("/api/attendance/all", async (req, res) => {
   }
 });
 
+// Add new hall endpoint
+app.post("/api/halls/add", async (req, res) => {
+  try {
+    const { name, polygon } = req.body;
+
+    // Validation
+    if (!name || !polygon || !Array.isArray(polygon) || polygon.length !== 4) {
+      return res.status(400).json({
+        error: "Hall name and exactly 4 polygon coordinates are required",
+      });
+    }
+
+    // Validate each coordinate
+    for (let i = 0; i < polygon.length; i++) {
+      const point = polygon[i];
+      if (!point.lat || !point.lng || 
+          typeof point.lat !== 'number' || typeof point.lng !== 'number') {
+        return res.status(400).json({ 
+          error: `Invalid coordinates for point ${i + 1}` 
+        });
+      }
+    }
+
+    // Check if hall with this name already exists
+    const existingHall = await db.collection('halls').findOne({ 
+      name: name.toUpperCase() 
+    });
+
+    if (existingHall) {
+      return res.status(409).json({ 
+        error: "A hall with this name already exists" 
+      });
+    }
+
+    // Insert the new hall
+    const newHall = {
+      name: name.toUpperCase(),
+      polygon: polygon,
+      createdAt: new Date()
+    };
+
+    const result = await db.collection('halls').insertOne(newHall);
+
+    console.log(`New hall "${name}" added with ${polygon.length} coordinates`);
+
+    res.json({
+      success: true,
+      hallId: result.insertedId,
+      message: `Hall "${name}" has been added successfully`
+    });
+
+  } catch (error) {
+    console.error("Error adding hall:", error);
+    res.status(500).json({ error: "Failed to add hall to database" });
+  }
+});
+
 // Serve static files
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "admin.html"));
@@ -472,6 +529,10 @@ app.get("/attend", (req, res) => {
 
 app.get("/attendance", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "attendance.html"));
+});
+
+app.get("/add-hall", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "add-hall.html"));
 });
 
 app.get("/", (req, res) => {
