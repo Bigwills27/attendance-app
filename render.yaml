@@ -9,6 +9,8 @@ services:
       - key: PORT
         value: 10000
       - key: MONGODB_URI
-        value: mongodb+srv://yudtkme:yudtkme20@tabmc.zhquyvw.mongodb.net/iAttend
+        fromDatabase:
+          name: iattend
+          property: connectionString
       - key: NODE_ENV
         value: production

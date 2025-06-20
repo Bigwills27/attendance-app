@@ -25,7 +25,12 @@
   "devDependencies": {
     "nodemon": "^3.0.3"
   },
-  "keywords": ["attendance", "gps", "geofence", "education"],
+  "keywords": [
+    "attendance",
+    "gps",
+    "geofence",
+    "education"
+  ],
   "author": "Your Name",
   "license": "MIT"
 }

@@ -11,7 +11,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://yudtkme:yudtkme20@tabmc.zhquyvw.mongodb.net/iAttend";
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) {
+  console.error('MongoDB URI is not set. Please set the MONGODB_URI environment variable.');
+  process.exit(1);
+}
 let db;
 
 // Connect to MongoDB
