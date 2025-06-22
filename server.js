@@ -37,7 +37,7 @@ MongoClient.connect(MONGODB_URI)
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public"), { extensions: ["html"] }));
 
 // Trust proxy for correct IP detection
 app.set("trust proxy", true);
@@ -476,22 +476,26 @@ app.post("/api/halls/add", async (req, res) => {
     // Validate each coordinate
     for (let i = 0; i < polygon.length; i++) {
       const point = polygon[i];
-      if (!point.lat || !point.lng || 
-          typeof point.lat !== 'number' || typeof point.lng !== 'number') {
-        return res.status(400).json({ 
-          error: `Invalid coordinates for point ${i + 1}` 
+      if (
+        !point.lat ||
+        !point.lng ||
+        typeof point.lat !== "number" ||
+        typeof point.lng !== "number"
+      ) {
+        return res.status(400).json({
+          error: `Invalid coordinates for point ${i + 1}`,
         });
       }
     }
 
     // Check if hall with this name already exists
-    const existingHall = await db.collection('halls').findOne({ 
-      name: name.toUpperCase() 
+    const existingHall = await db.collection("halls").findOne({
+      name: name.toUpperCase(),
     });
 
     if (existingHall) {
-      return res.status(409).json({ 
-        error: "A hall with this name already exists" 
+      return res.status(409).json({
+        error: "A hall with this name already exists",
       });
     }
 
@@ -499,19 +503,18 @@ app.post("/api/halls/add", async (req, res) => {
     const newHall = {
       name: name.toUpperCase(),
       polygon: polygon,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
-    const result = await db.collection('halls').insertOne(newHall);
+    const result = await db.collection("halls").insertOne(newHall);
 
     console.log(`New hall "${name}" added with ${polygon.length} coordinates`);
 
     res.json({
       success: true,
       hallId: result.insertedId,
-      message: `Hall "${name}" has been added successfully`
+      message: `Hall "${name}" has been added successfully`,
     });
-
   } catch (error) {
     console.error("Error adding hall:", error);
     res.status(500).json({ error: "Failed to add hall to database" });

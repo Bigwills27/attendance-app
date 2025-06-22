@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Hall - Smart Attendance</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay hidden">
@@ -14,115 +16,131 @@
     </div>
 
     <div class="container">
-        <div class="header">
+        <div class="dashboard-header">
             <h1>Add New Hall</h1>
             <p>Create a new lecture hall with precise geofence boundaries</p>
         </div>
 
         <!-- Add Hall Form -->
         <div id="addHallForm" class="form-container">
-            <form id="hallForm">
-                <div class="form-group">
-                    <label for="hallName">Hall Name</label>
-                    <input type="text" id="hallName" name="hallName" placeholder="e.g., ENGINEERING HALL C" required>
-                    <small>Enter a descriptive name for the lecture hall</small>
-                </div>
+            <div class="login-card">
+                <form id="hallForm">
+                    <div class="form-group">
+                        <label for="hallName">Hall Name</label>
+                        <input type="text" id="hallName" name="hallName" placeholder="e.g., ENGINEERING HALL C"
+                            required>
+                        <small>Enter a descriptive name for the lecture hall</small>
+                    </div>
 
-                <div class="coordinates-section">
-                    <h3>Geofence Coordinates</h3>
-                    <p class="instructions">Enter the 4 corner points of the lecture hall. Use a GPS app or Google Maps to get precise coordinates.</p>
-                    
-                    <div class="coordinates-grid">
-                        <div class="coordinate-point">
-                            <h4>Point 1 (Top-Left)</h4>
-                            <div class="coordinate-inputs">
-                                <div class="form-group">
-                                    <label for="lat1">Latitude</label>
-                                    <input type="number" id="lat1" step="0.000000001" placeholder="6.506791408381259" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lng1">Longitude</label>
-                                    <input type="number" id="lng1" step="0.000000001" placeholder="3.1989491628486872" required>
+                    <div class="coordinates-section">
+                        <h3>Geofence Coordinates</h3>
+                        <p class="instructions">Enter the 4 corner points of the lecture hall. Use a GPS app or Google
+                            Maps to get precise coordinates.</p>
+
+                        <div class="coordinates-grid">
+                            <div class="coordinate-point">
+                                <h4>Point 1 (Top-Left)</h4>
+                                <div class="coordinate-inputs">
+                                    <div class="form-group">
+                                        <label for="lat1">Latitude</label>
+                                        <input type="number" id="lat1" step="0.000000001"
+                                            placeholder="6.506791408381259" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lng1">Longitude</label>
+                                        <input type="number" id="lng1" step="0.000000001"
+                                            placeholder="3.1989491628486872" required>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="coordinate-point">
-                            <h4>Point 2 (Top-Right)</h4>
-                            <div class="coordinate-inputs">
-                                <div class="form-group">
-                                    <label for="lat2">Latitude</label>
-                                    <input type="number" id="lat2" step="0.000000001" placeholder="6.5067167902985465" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lng2">Longitude</label>
-                                    <input type="number" id="lng2" step="0.000000001" placeholder="3.1989370929089223" required>
+                            <div class="coordinate-point">
+                                <h4>Point 2 (Top-Right)</h4>
+                                <div class="coordinate-inputs">
+                                    <div class="form-group">
+                                        <label for="lat2">Latitude</label>
+                                        <input type="number" id="lat2" step="0.000000001"
+                                            placeholder="6.5067167902985465" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lng2">Longitude</label>
+                                        <input type="number" id="lng2" step="0.000000001"
+                                            placeholder="3.1989370929089223" required>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="coordinate-point">
-                            <h4>Point 3 (Bottom-Right)</h4>
-                            <div class="coordinate-inputs">
-                                <div class="form-group">
-                                    <label for="lat3">Latitude</label>
-                                    <input type="number" id="lat3" step="0.000000001" placeholder="6.506703465639764" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lng3">Longitude</label>
-                                    <input type="number" id="lng3" step="0.000000001" placeholder="3.1990323113226204" required>
+                            <div class="coordinate-point">
+                                <h4>Point 3 (Bottom-Right)</h4>
+                                <div class="coordinate-inputs">
+                                    <div class="form-group">
+                                        <label for="lat3">Latitude</label>
+                                        <input type="number" id="lat3" step="0.000000001"
+                                            placeholder="6.506703465639764" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lng3">Longitude</label>
+                                        <input type="number" id="lng3" step="0.000000001"
+                                            placeholder="3.1990323113226204" required>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="coordinate-point">
-                            <h4>Point 4 (Bottom-Left)</h4>
-                            <div class="coordinate-inputs">
-                                <div class="form-group">
-                                    <label for="lat4">Latitude</label>
-                                    <input type="number" id="lat4" step="0.000000001" placeholder="6.506774086327322" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lng4">Longitude</label>
-                                    <input type="number" id="lng4" step="0.000000001" placeholder="3.1990423696057575" required>
+                            <div class="coordinate-point">
+                                <h4>Point 4 (Bottom-Left)</h4>
+                                <div class="coordinate-inputs">
+                                    <div class="form-group">
+                                        <label for="lat4">Latitude</label>
+                                        <input type="number" id="lat4" step="0.000000001"
+                                            placeholder="6.506774086327322" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lng4">Longitude</label>
+                                        <input type="number" id="lng4" step="0.000000001"
+                                            placeholder="3.1990423696057575" required>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-actions">
-                    <button type="button" id="validateBtn" class="btn btn-secondary">
-                        📍 Validate Coordinates
-                    </button>
-                    <button type="submit" id="submitBtn" class="btn btn-primary">
-                        ✅ Add Hall
-                    </button>
-                </div>
-            </form>
+                    <div class="form-actions">
+                        <button type="button" id="validateBtn" class="btn btn-secondary">
+                            📍 Validate Coordinates
+                        </button>
+                        <button type="submit" id="submitBtn" class="btn btn-primary">
+                            ✅ Add Hall
+                        </button>
+                    </div>
+                </form>
 
-            <div id="validationResult" class="status-message hidden"></div>
+                <div id="validationResult" class="status-message hidden"></div>
+            </div>
         </div>
 
         <!-- Success Screen -->
         <div id="successScreen" class="screen hidden">
-            <div class="success-icon">✅</div>
-            <h2>Hall Added Successfully!</h2>
-            <div id="successDetails"></div>
-            <div class="form-actions">
-                <button id="addAnotherBtn" class="btn btn-primary">Add Another Hall</button>
-                <button id="backToAdminBtn" class="btn btn-secondary">Back to Admin</button>
+            <div class="status-card success-card">
+                <div class="success-icon">✅</div>
+                <h2>Hall Added Successfully!</h2>
+                <div id="successDetails" class="success-details"></div>
+                <div class="form-actions">
+                    <button id="addAnotherBtn" class="btn btn-primary">Add Another Hall</button>
+                    <button id="backToAdminBtn" class="btn btn-secondary">Back to Admin</button>
+                </div>
             </div>
         </div>
 
         <!-- Error Screen -->
         <div id="errorScreen" class="screen hidden">
-            <div class="error-icon">❌</div>
-            <h2 id="errorTitle">Error</h2>
-            <p id="errorMessage"></p>
-            <div class="form-actions">
-                <button id="retryBtn" class="btn btn-primary">Try Again</button>
-                <button id="backToFormBtn" class="btn btn-secondary">Back to Form</button>
+            <div class="status-card error-card">
+                <div class="error-icon">❌</div>
+                <h2 id="errorTitle">Error</h2>
+                <p id="errorMessage"></p>
+                <div class="form-actions">
+                    <button id="retryBtn" class="btn btn-primary">Try Again</button>
+                    <button id="backToFormBtn" class="btn btn-secondary">Back to Form</button>
+                </div>
             </div>
         </div>
 
@@ -133,4 +151,5 @@
 
     <script src="add-hall.js"></script>
 </body>
+
 </html>
