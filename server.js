@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
 const cors = require("cors");
@@ -37,7 +38,9 @@ MongoClient.connect(MONGODB_URI)
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public"), { extensions: ["html"] }));
+app.use(
+  express.static(path.join(__dirname, "public"), { extensions: ["html"] })
+);
 
 // Trust proxy for correct IP detection
 app.set("trust proxy", true);
@@ -79,10 +82,10 @@ async function initializeDatabase() {
         {
           name: "BASE",
           polygon: [
-            { lat: 6.506791408381259, lng: 3.1989491628486872 },
-            { lat: 6.5067167902985465, lng: 3.1989370929089223 },
-            { lat: 6.506703465639764, lng: 3.1990323113226204 },
-            { lat: 6.506774086327322, lng: 3.1990423696057575 },
+            { lat: 6.506807, lng: 3.198828 },
+            { lat: 6.506733, lng: 3.198817 },
+            { lat: 6.506705, lng: 3.199032 },
+            { lat: 6.506777, lng: 3.199043 },
           ],
         },
       ]);
@@ -319,20 +322,32 @@ app.post("/api/attendance/submit", async (req, res) => {
         .json({ error: "You have already signed in for this attendance" });
     }
 
-    // Check if location is within geofence
-    const polygon = attendance.polygon.map((point) => [point.lat, point.lng]);
-    const isInside = pointInPolygon([location.lat, location.lng], polygon);
+    // Check if location is within reasonable distance of the hall
+    const centerLat =
+      polygon.reduce((sum, point) => sum + point[0], 0) / polygon.length;
+    const centerLng =
+      polygon.reduce((sum, point) => sum + point[1], 0) / polygon.length;
+    const distance = geolib.getDistance(
+      { latitude: location.lat, longitude: location.lng },
+      { latitude: centerLat, longitude: centerLng }
+    );
+
+    // Allow attendance if within 100 meters of hall center
+    const maxDistance = 100; // meters
+    const isWithinRange = distance <= maxDistance;
 
     // Debug logging
     console.log("Location validation:", {
       userLocation: [location.lat, location.lng],
-      polygon: polygon,
-      isInside: isInside,
+      hallCenter: [centerLat, centerLng],
+      distance: distance,
+      maxDistance: maxDistance,
+      isWithinRange: isWithinRange,
       eventId: eventId,
     });
 
     // For development/testing, be more lenient with location validation
-    if (!isInside) {
+    if (!isWithinRange) {
       // Check if this is a test location or manual entry
       if (location.accuracy === "test" || location.accuracy === "manual") {
         console.log("Allowing test/manual location for development");
@@ -341,13 +356,9 @@ app.post("/api/attendance/submit", async (req, res) => {
           error: "You are outside the lecture hall zone",
           debug: {
             userLocation: [location.lat, location.lng],
-            requiredArea: polygon,
-            distance: this.calculateDistanceToPolygon
-              ? this.calculateDistanceToPolygon(
-                  [location.lat, location.lng],
-                  polygon
-                )
-              : "unknown",
+            hallCenter: [centerLat, centerLng],
+            distance: distance,
+            maxDistance: maxDistance,
           },
         });
       }
